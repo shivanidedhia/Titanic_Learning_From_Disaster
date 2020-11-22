@@ -61,6 +61,43 @@ summary(data.combined$sibsp)
 length(unique(data.combined$sibsp))
 data.combined$sibsp <- as.factor(data.combined$sibsp)
 
+# Title has some predictive power
+# Mr. is 3rd class who were traveling alone mostly died
+ggplot(data.combined[1:891,], aes(x = sibsp, fill = survived)) +
+  geom_bar() +
+  facet_wrap(~pclass + title) + 
+  ggtitle("Survival Rates by Title and Passenger Class") +
+  xlab("SibSp") +
+  ylab("Total Count") +
+  ylim(0,300) +
+  labs(fill = "Survived")
 
+# Parent Children Variable with Pclass and Title
+# Adult women in third class with a larger 
+# family start to have a lower chance of survival
+data.combined$parch <- as.factor(data.combined$parch)
+ggplot(data.combined[1:891,], aes(x = parch, fill = survived)) +
+  geom_bar() +
+  facet_wrap(~pclass + title) + 
+  ggtitle("Parent and Childeren Survival Rates with Pclass, Title") +
+  xlab("ParCh") +
+  ylab("Total Count") +
+  ylim(0,300) +
+  labs(fill = "Survived")
 
+# Create a family size
+temp.sibsp <- c(train$sibsp, test$sibsp)
+temp.parch <- c(train$parch, test$parch)
+data.combined$family.size <- as.factor(temp.sibsp + temp.parch + 1)
+
+# Visualize the family size
+
+ggplot(data.combined[1:891,], aes(x = family.size, fill = survived)) +
+  geom_bar() +
+  facet_wrap(~pclass + title) + 
+  ggtitle("Family Size Survival Rates with Pclass, Title") +
+  xlab("family.size") +
+  ylab("Total Count") +
+  ylim(0,300) +
+  labs(fill = "Survived")
 
